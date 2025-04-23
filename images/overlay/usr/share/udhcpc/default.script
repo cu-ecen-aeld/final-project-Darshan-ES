@@ -1,0 +1,13 @@
+#!/bin/sh
+
+[ -z "$1" ] && echo "Error: no interface" && exit 1
+
+case "$1" in
+    deconfig)
+        /sbin/ifconfig $interface 0.0.0.0
+        ;;
+    renew|bound)
+        /sbin/ifconfig $interface $ip
+        echo "nameserver $dns" > /etc/resolv.conf
+        ;;
+esac
