@@ -14,6 +14,8 @@ HOST = ''
 reader = easyocr.Reader(['en', 'hi'], verbose=False)
 text_counter = Counter()
 finalized_set = set()
+target_words = {"HAND", "NOSE", "EYES", "HEAD"}
+seen_targets = set()
 
 frame_id = 0  # Frame tracker
 
@@ -82,17 +84,28 @@ try:
                 except:
                     lang = "unknown"
                 log_msg = f"[OCR FINAL] Lang={lang.upper()} | Text='{combined_text}'"
-                print(log_msg)
+                print(log_msg, flush=True)
                 syslog.syslog(syslog.LOG_NOTICE, log_msg)
                 finalized_set.add(combined_text)
+
+                # Test Case Logic
+                upper_text = combined_text.upper()
+                for word in target_words:
+                    if word in upper_text and word not in seen_targets:
+                        seen_targets.add(word)
+                        print(f"[MATCHED] {word}", flush=True)
+
+                if seen_targets == target_words:
+                    print("TEST PASSED: All target words detected.", flush=True)
+                    break  # Exit loop after test pass
 
         cv2.imshow("OCR Stream", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
 except Exception as e:
-    error_msg = f"[ERROR] {type(e)._name_}: {e}"
-    print(error_msg)
+    error_msg = f"[ERROR] {type(e).__name__}: {e}"
+    print(error_msg, flush=True)
     syslog.syslog(syslog.LOG_ERR, error_msg)
 
 finally:
