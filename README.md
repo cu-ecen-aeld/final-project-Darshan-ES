@@ -1,8 +1,5 @@
 # [Project overview](https://github.com/cu-ecen-aeld/final-project-Darshan-ES/wiki)
 
-# 📷 Real-Time OCR Detection System (Buildroot + EasyOCR)
-
-This project implements a real-time keyword detection system using Optical Character Recognition (OCR) over a network between two Raspberry Pis. It captures video frames, performs OCR using EasyOCR.
 
 ---
 
